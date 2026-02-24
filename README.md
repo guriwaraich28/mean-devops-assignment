@@ -1,27 +1,145 @@
-In this DevOps task, you need to build and deploy a full-stack CRUD application using the MEAN stack (MongoDB, Express, Angular 15, and Node.js). The backend will be developed with Node.js and Express to provide REST APIs, connecting to a MongoDB database. The frontend will be an Angular application utilizing HTTPClient for communication.  
+# 🚀 MEAN Stack DevOps CI/CD Deployment
 
-The application will manage a collection of tutorials, where each tutorial includes an ID, title, description, and published status. Users will be able to create, retrieve, update, and delete tutorials. Additionally, a search box will allow users to find tutorials by title.
+A complete end-to-end DevOps project that demonstrates how to **containerize, automate, and deploy** a full-stack **MEAN (MongoDB, Express, Angular, Node.js)** application using **Docker, Jenkins CI/CD, Nginx, and AWS EC2**.
 
-## Project setup
+This project was built as part of a DevOps internship assignment.
 
-### Node.js Server
+---
 
-cd backend
+# 📌 Project Highlights
 
-npm install
+✔ Containerized full-stack MEAN application  
+✔ Docker Compose multi-container deployment  
+✔ Jenkins CI/CD pipeline (build → push → deploy)  
+✔ DockerHub image registry integration  
+✔ AWS EC2 production deployment  
+✔ Nginx reverse proxy on port 80  
+✔ Automatic redeployment on code changes  
 
-You can update the MongoDB credentials by modifying the `db.config.js` file located in `app/config/`.
+---
 
-Run `node server.js`
+# 🏗️ Architecture Diagram
 
-### Angular Client
+Developer → GitHub → Jenkins → DockerHub → AWS EC2 → Docker Compose → Nginx → Browser
 
-cd frontend
+---
 
-npm install
+# ⚙️ Tech Stack
 
-Run `ng serve --port 8081`
+## 🖥️ Application
+- Angular 15 (Frontend)
+- Node.js + Express (Backend API)
+- MongoDB (Database)
 
-You can modify the `src/app/services/tutorial.service.ts` file to adjust how the frontend interacts with the backend.
+## 🛠️ DevOps & Cloud
+- Docker
+- Docker Compose (v2)
+- Jenkins CI/CD
+- AWS EC2 (Ubuntu)
+- Nginx Reverse Proxy
+- DockerHub Registry
 
-Navigate to `http://localhost:8081/`
+---
+
+# 📂 Project Structure
+
+
+mean-devops-assignment/
+│
+├── backend/
+│ ├── Dockerfile
+│ ├── package.json
+│ └── Node.js Express API
+│
+├── frontend/
+│ ├── Dockerfile
+│ ├── angular.json
+│ └── Angular App
+│
+├── nginx.conf
+├── docker-compose.yml
+└── Jenkinsfile
+
+
+---
+
+# 🐳 Docker Images
+
+| Service | Image |
+|---|---|
+| Backend | `guriwaraich/mean-backend:latest` |
+| Frontend | `guriwaraich/mean-frontend:latest` |
+| MongoDB | `mongo:latest` |
+| Nginx | `nginx:alpine` |
+
+---
+
+# 🔁 Jenkins CI/CD Pipeline
+
+## Pipeline Flow
+
+When code is pushed to GitHub:
+
+### 1️⃣ Clone Repository
+Jenkins pulls latest source code.
+
+### 2️⃣ Build Backend Image
+docker build -t guriwaraich/mean-backend ./backend
+
+### 3️⃣ Push Backend Image
+docker push guriwaraich/mean-backend
+
+### 4️⃣ Build Frontend Image
+docker build -t guriwaraich/mean-frontend ./frontend
+
+### 5️⃣ Push Frontend Image
+docker push guriwaraich/mean-frontend
+
+### 6️⃣ Deploy to AWS EC2 via SSH
+docker compose pull
+docker compose up -d
+
+Containers restart automatically with latest images.
+
+---
+
+### 🌐 Application Deployment
+
+The entire application is exposed through Nginx reverse proxy.
+
+Access URL
+http://54.159.49.45/
+
+Runs on port 80.
+
+---
+
+### 🎯 DevOps Concepts Demonstrated
+
+CI/CD Automation
+
+Containerization with Docker
+
+Multi-container deployment
+
+Reverse proxy configuration
+
+Secure credential management
+
+Cloud deployment on AWS
+
+Continuous delivery pipeline
+
+---
+
+### 👨‍💻 Author
+
+Gurwinder Singh
+DevOps & Cloud Enthusiast
+
+### 🏁 Final Status
+
+✅ Application Dockerized
+✅ CI/CD Pipeline Implemented
+✅ Successfully Deployed on AWS
+✅ Production-style Architecture

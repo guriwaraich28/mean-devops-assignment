@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_USER = "guriwaraich"
+        SERVER_IP = "54.159.49.45"
+    }
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/guriwaraich28/mean-devops-assignment.git',
+                credentialsId: 'github-creds'
+            }
+        }
+
+        stage('Build Backend Image') {
+            steps {
+                sh 'docker build -t $DOCKER_USER/mean-backend ./backend'
+            }
+        }
+
+        stage('Push Backend Image') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
+                usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh 'docker push $DOCKER_USER/mean-backend'
+                }
+            }
+        }
+
+        stage('Build Frontend Image') {
+            steps {
+                sh 'docker build -t $DOCKER_USER/mean-frontend ./frontend'
+            }
+        }
+
+        stage('Push Frontend Image') {
+            steps {
+                sh 'docker push $DOCKER_USER/mean-frontend'
+            }
+        }
+
+        stage('Deploy to Server') {
+            steps {
+                sshagent(['server-ssh-key']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ubuntu@$SERVER_IP '
+                    cd mean-devops-assignment &&
+                    docker compose pull &&
+                    docker compose up -d
+                    '
+                    """
+                }
+            }
+        }
+    }
+}
