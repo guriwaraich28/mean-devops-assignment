@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+
+  backend:
+    image: mean-backend
+    container_name: backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mongo
+
+  frontend:
+    image: mean-frontend
+    container_name: frontend
+    restart: always
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
